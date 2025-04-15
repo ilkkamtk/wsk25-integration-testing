@@ -1,0 +1,13 @@
+{
+  "name": "Students",
+  "version": "1.0.0",
+  "description": "For Metropolia Courses",
+  "title": "Students",
+  "url": "/api/v1",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  },
+  "exclude": ["node_modules/", "public/"],
+  "files": ["src/apidoc/**/*.js"]
+}
