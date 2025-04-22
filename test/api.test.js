@@ -2,7 +2,12 @@
 import app from '../src/app.js';
 import {closePool} from '../src/utils/db.js';
 import {getNotFound} from './errorTests.js';
-import {deleteStudent, postStudent} from './studentTests.js';
+import {
+  deleteStudent,
+  getStudents,
+  postStudent,
+  putStudent,
+} from './studentTests.js';
 
 // TODO: start the tests in this file: create describe and it blocks
 // the actual tests are in the other files in this folder
@@ -36,6 +41,29 @@ describe('Test API version 1.0', () => {
     testUserID = result.id;
   });
 
+  // TODO: Test get all students
+  // Hint: Use the getStudents(app) function.
+  it('should get all students', async () => {
+    await getStudents(app);
+  });
+
+  // TODO: Test get single student
+  // Hint: Retrieve a single student using the getSingleStudent(app, testUserID) function.
+  it('should get single student', async () => {
+    await getStudents(app, testUserID);
+  });
+
+  // TODO: Test update student
+  // Hint: Update a student using the putStudent(app, newStudent, testUserID) function.
+  // Provide the newStudent data for the update operation.
+  it('should update student', async () => {
+    const newStudent = {
+      student_name: 'Jorma Updated',
+      birthdate: '1999-05-23',
+    };
+    await putStudent(app, testUserID, newStudent);
+  });
+
   // TODO: Test delete student
   // Hint: Delete a student using the deleteStudent(app, testUserID) function.
   it('should delete student', async () => {
@@ -49,18 +77,8 @@ describe('Test API version 1.0', () => {
 // TODO: Test create student validation error, no name
 // Hint: Use the postStudentNameError(app, student) function.
 
-// TODO: Test get all students
-// Hint: Use the getStudents(app) function.
-
-// TODO: Test get single student
-// Hint: Retrieve a single student using the getSingleStudent(app, testUserID) function.
-
 // TODO: Test get single student error
 // Hint: Use the getSingleStudentError(app, 999999) function to attempt to fetch a non-existent student.
-
-// TODO: Test update student
-// Hint: Update a student using the putStudent(app, newStudent, testUserID) function.
-// Provide the newStudent data for the update operation.
 
 // TODO: Test delete student
 // Hint: Delete a student using the deleteStudent(app, testUserID) function.
