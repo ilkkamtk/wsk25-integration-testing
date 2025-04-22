@@ -6,7 +6,6 @@ import {
   updateStudent,
 } from '../models/studentModel.js';
 import CustomError from '../../classes/CustomError.js';
-import {validationResult} from 'express-validator';
 import fs from 'fs';
 
 const studentListGet = async (req, res, next) => {
@@ -19,16 +18,6 @@ const studentListGet = async (req, res, next) => {
 };
 
 const studentGet = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const messages = errors
-      .array()
-      .map((error) => `${error.msg}: ${error.param}`)
-      .join(', ');
-    next(new CustomError(messages, 400));
-    return;
-  }
-
   try {
     const student = await getStudent(req.params.id);
     res.json(student);
@@ -39,16 +28,6 @@ const studentGet = async (req, res, next) => {
 
 const studentPost = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const messages = errors
-        .array()
-        .map((error) => `${error.msg}: ${error.param}`)
-        .join(', ');
-      next(new CustomError(messages, 400));
-      return;
-    }
-
     if (!req.file) {
       const err = new CustomError('file not valid', 400);
       throw err;
@@ -69,16 +48,6 @@ const studentPost = async (req, res, next) => {
 };
 
 const studentPut = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const messages = errors
-      .array()
-      .map((error) => `${error.msg}: ${error.param}`)
-      .join(', ');
-    next(new CustomError(messages, 400));
-    return;
-  }
-
   try {
     const id = parseInt(req.params.id);
     const student = req.body;
@@ -96,16 +65,6 @@ const studentPut = async (req, res, next) => {
 };
 
 const studentDelete = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const messages = errors
-      .array()
-      .map((error) => `${error.msg}: ${error.param}`)
-      .join(', ');
-    next(new CustomError(messages, 400));
-    return;
-  }
-
   try {
     const id = parseInt(req.params.id);
     // delete file from uploads

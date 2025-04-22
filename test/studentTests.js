@@ -1,4 +1,5 @@
 import request from 'supertest';
+import {expect} from '@jest/globals';
 
 // TODO: Test the getStudents function. Verify that it fetches and validates the list of students.
 const getStudents = async (url) => {
@@ -103,4 +104,27 @@ const deleteStudent = async (url, studentId) => {
   });
 };
 
-export {getStudents, postStudent, putStudent, deleteStudent};
+const getStudentImage = async (url, filename) => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .get('/uploads/' + filename)
+      .expect('Content-Type', /image/)
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const result = response.body;
+          resolve(result);
+        }
+      });
+  });
+};
+
+export {
+  getStudents,
+  getSingleStudent,
+  postStudent,
+  putStudent,
+  deleteStudent,
+  getStudentImage,
+};

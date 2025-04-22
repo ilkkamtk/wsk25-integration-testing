@@ -1,9 +1,16 @@
 /* eslint-disable no-undef */
 import app from '../src/app.js';
 import {closePool} from '../src/utils/db.js';
-import {getNotFound} from './errorTests.js';
+import {
+  getNotFound,
+  getSingleStudentError,
+  postStudentFileError,
+  postStudentNameError,
+} from './errorTests.js';
 import {
   deleteStudent,
+  getSingleStudent,
+  getStudentImage,
   getStudents,
   postStudent,
   putStudent,
@@ -32,13 +39,34 @@ describe('Test API version 1.0', () => {
     image: 'test/cat.jpg',
   };
 
-  let testUserID = '';
+  let testUserID = 0;
+  let createdUser = {};
   // TODO: Test create student
   // Hint: Create a new student using the postStudent(app, student) function.
   // If successful, save the student ID to global variable testUserID.
   it('should create new student', async () => {
     const result = await postStudent(app, student);
     testUserID = result.id;
+  });
+
+  // TODO: Test create student file error
+  // Hint: Use the postStudentFileError(app, student) function.
+  it('should create student file error', async () => {
+    const studentWithFileError = {
+      name: 'Jorma',
+      birthdate: '1999-05-23',
+    };
+    await postStudentFileError(app, studentWithFileError);
+  });
+
+  // TODO: Test create student validation error, no name
+  // Hint: Use the postStudentNameError(app, student) function.
+  it('should create student name error', async () => {
+    const studentWithNameError = {
+      birthdate: '1999-05-23',
+      image: 'test/cat.jpg',
+    };
+    await postStudentNameError(app, studentWithNameError);
   });
 
   // TODO: Test get all students
@@ -50,7 +78,12 @@ describe('Test API version 1.0', () => {
   // TODO: Test get single student
   // Hint: Retrieve a single student using the getSingleStudent(app, testUserID) function.
   it('should get single student', async () => {
-    await getStudents(app, testUserID);
+    createdUser = await getSingleStudent(app, testUserID);
+  });
+
+  // Get student image
+  it('should get student image', async () => {
+    await getStudentImage(app, createdUser.filename);
   });
 
   // TODO: Test update student
@@ -69,33 +102,15 @@ describe('Test API version 1.0', () => {
   it('should delete student', async () => {
     await deleteStudent(app, testUserID);
   });
+
+  // TODO: Test the getSingleStudentError function for error handling.
+  // Hint: Verify that the function responds with an appropriate error message when attempting to fetch a non-existent student.
+  it('should get single student error', async () => {
+    await getSingleStudentError(app, testUserID);
+  });
+
+  // TODO: fileNotFoundError. Should generate 404 error for file not found
+  it('should generate 404 error for file not found', async () => {
+    await getNotFound(app, createdUser.filename);
+  });
 });
-
-// TODO: Test create student file error
-// Hint: Use the postStudentFileError(app, student) function.
-
-// TODO: Test create student validation error, no name
-// Hint: Use the postStudentNameError(app, student) function.
-
-// TODO: Test get single student error
-// Hint: Use the getSingleStudentError(app, 999999) function to attempt to fetch a non-existent student.
-
-// TODO: Test delete student
-// Hint: Delete a student using the deleteStudent(app, testUserID) function.
-
-// Test error handling
-
-// TODO: Test the getNotFound function for error handling.
-// Hint: Verify that the function responds with an appropriate error message.
-
-// TODO: Test the getSingleStudentError function for error handling.
-// Hint: Verify that the function responds with an appropriate error message when attempting to fetch a non-existent student.
-
-// TODO: Test the postStudentFileError function for error handling.
-// Hint: Verify that the function responds with an appropriate error message when adding a student with a file error.
-
-// TODO: Test the postStudentNameError function for error handling.
-// Hint: Verify that the function responds with an appropriate error message when adding a student with missing or invalid name.
-
-// TODO: Test the fileNotFoundError function for error handling.
-// Hint: Verify that this function handles file not found errors appropriately.
